@@ -15,6 +15,7 @@ export const Header = () => {
 
 
   const { user, isAuthenticated } = useAuth();
+  const user = useAuthUser();
 
   const loginWithRedirect = useLoginWithRedirect();
 
