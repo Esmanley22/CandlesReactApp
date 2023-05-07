@@ -4,8 +4,9 @@ import { faArrowTrendUp } from '@fortawesome/free-solid-svg-icons/faArrowTrendUp
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import { useAuth, useLoginWithRedirect, ContextHolder, AuthorizedContent, useAuthUser } from "@frontegg/react";
+import { useAuth, useLoginWithRedirect, ContextHolder, AuthorizedContent, useAuthUser, AdminPortal } from "@frontegg/react";
 import Form from 'react-bootstrap/Form';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 
 
 
@@ -21,6 +22,10 @@ export const Header = () => {
     const baseUrl = ContextHolder.getContext().baseUrl;
     window.location.href = `${baseUrl}/oauth/logout?post_logout_redirect_uri=${window.location}`;
   };
+  
+  const handleClick = () => {
+    AdminPortal.show();
+  };  
 
   const [isVisible, setIsVisible] = useState(false)
 
@@ -59,13 +64,20 @@ export const Header = () => {
 
           <Nav.Link href="/Learn" className='text-white'>Learn Patterns</Nav.Link>
 
+          <NavDropdown title="Account" className='text-white' id="basic-nav-dropdown">
           {
                       !  isAuthenticated ?
 
-            <Nav.Link href="/#" className='text-white' onClick={ () => { loginWithRedirect()}}><div> Sign in </div></Nav.Link>
+            <NavDropdown.Item href="/CandlesChart" className='text-black bg-light' onClick={ () => { loginWithRedirect()}}><div> Sign in </div></NavDropdown.Item>
             : 
-            <Nav.Link href="/#" className='text-white' onClick={ () => { logout()}}><div> Sign out </div></Nav.Link>
+            <>
+            <NavDropdown.Item href='/#' className='text-black' disabled><div className='bg-light'> User: <u>{user.email}</u> </div></NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item href='/#' className='text-black bg-light' onClick={handleClick}><div> Admin Portal </div></NavDropdown.Item>
+            <NavDropdown.Item href="/#" className='text-black bg-light' onClick={ () => { logout()}}><div> Sign out </div></NavDropdown.Item>
+            </>
           }
+          </NavDropdown>
 
           </Nav>
           <Form className="d-flex">
